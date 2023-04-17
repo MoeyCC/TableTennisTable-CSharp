@@ -10,7 +10,7 @@ namespace TableTennisTable_CSharp
 
         public LeagueRow(int maxSize)
         {
-            _maxSize = maxSize;
+            _maxSize = maxSize; //ComputeMaxSizeWithSizeCap(maxSize); ignore this comment, it will be relevant in a later exercise
             _players = new List<string>();
         }
 
@@ -55,5 +55,16 @@ namespace TableTennisTable_CSharp
         {
             return _players.Contains(player);
         }
+
+        // private int ComputeMaxSizeWithSizeCap(int maxSize){
+        //     var sizeCapString = Environment.GetEnvironmentVariable("TABLE_TENNIS_LEAGUE_ROW_SIZE_CAP");
+        //     if (sizeCapString == null) return maxSize;
+
+        //     var sizeCap = int.Parse(sizeCapString);
+        //     return maxSize <= sizeCap
+        //             ? maxSize
+        //             : sizeCap;
+        // }
+        // Ignore this size cap code, it will be relevant in a future exercise.
     }
 }
