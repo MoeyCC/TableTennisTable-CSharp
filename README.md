@@ -13,19 +13,16 @@
      Your trainer will be able to help you with this.
 
 3. "Cloning the repo" will create a folder on your computer with the files from this repo.  
-   Open this folder in IntelliJ / Visual Studio Code.
+   Open this folder in Visual Studio Code.
 
-4. Open a command-prompt in the project folder, or open the folder in an IDE such as JetBrains Rider, Visual Studio,
-   or VSCode.  
+4. Open a command-prompt in the project folder.  
    Your trainer can show you how to do this, if you need any help.
 
 5. Change directory to "TableTennisTable-CSharp", and run this command to run your code:  
    `dotnet run`
-   or run the project in your IDE (CTRL+F5 or ⌘+F5 usually)
 
 6. Run this command to test your code:  
    `dotnet test`
-   or run the tests from your IDE
 
 ## Commands
 
