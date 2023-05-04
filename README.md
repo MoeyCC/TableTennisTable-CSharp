@@ -21,7 +21,7 @@
 5. Change directory to "TableTennisTable-CSharp", and run this command to run your code:  
    `dotnet run`
 
-6. Run this command to test your code:  
+6. Run this command from the root directory to test your code:  
    `dotnet test`
 
 ## Commands
