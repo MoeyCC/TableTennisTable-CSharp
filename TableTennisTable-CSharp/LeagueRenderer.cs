@@ -24,7 +24,6 @@ namespace TableTennisTable_CSharp
             }
 
             var renderedRows = rows.Select((row, index) => RenderRow(row, index, rows.Count));
-
             return string.Join("\r\n", renderedRows);
         }
 
