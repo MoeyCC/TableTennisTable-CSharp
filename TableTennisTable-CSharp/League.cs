@@ -20,7 +20,7 @@ namespace TableTennisTable_CSharp
 
         private Regex _validNameRegex = new Regex("^\\w+$");
 
-        public void AddPlayer(string player)
+        public virtual void AddPlayer(string player)
         {
             ValidateName(player);
             CheckPlayerIsUnique(player);
@@ -38,7 +38,7 @@ namespace TableTennisTable_CSharp
             return _rows;
         }
 
-        public void RecordWin(string winner, string loser)
+        public virtual void RecordWin(string winner, string loser)
         {
             CheckPlayerIsInGame(winner);
             CheckPlayerIsInGame(loser);
@@ -55,7 +55,7 @@ namespace TableTennisTable_CSharp
             _rows[loserRowIndex].Swap(loser, winner);
         }
 
-        public string GetWinner()
+        public virtual string GetWinner()
         {
             if (_rows.Count > 0)
             {
