@@ -22,7 +22,7 @@ namespace TableTennisTable_Tests
         }
 
         [TestMethod]
-        public void AddingPlayerShouldReturnConfirmationMessage()
+        public void AddingValidPlayerShouldReturnConfirmationMessageAndAddPlayer()
         {
             // Arrange
             var mockLeague = new Mock<League>();
@@ -36,10 +36,13 @@ namespace TableTennisTable_Tests
 
             // Assert
             Assert.AreEqual("Added player Alice", result);
+
+            // Verify that the Addplayer method is called with the correct parms
+            mockLeague.Verify(l => l.AddPlayer("Alice"));
         }
 
         [TestMethod]
-        public void RecordingWinShouldReturnConfirmationMessage()
+        public void RecordingWinWithValidPlayersShouldReturnConfirmationMessageAndRecordWin()
         {
             //Arrange
             var mockLeague = new Mock<League>();
@@ -53,6 +56,9 @@ namespace TableTennisTable_Tests
 
             //Assert
             Assert.AreEqual("Recorded Alice win against Bob", result);
+        
+            // Verify that recordwin method is called with the correct parms
+            mockLeague.Verify(l => l.RecordWin("Alice", "Bob")); 
         }
 
         [TestMethod]
@@ -73,24 +79,28 @@ namespace TableTennisTable_Tests
         }
 
         [TestMethod]
-        public void SavingLeagueToFileShouldReturnConfirmation()
+        public void SavingLeagueToFileShouldReturnConfirmationAndSaveFile()
         {
             //Arrange
             var mockFileService = new Mock<IFileService>();
             var app = new App(null, null, mockFileService.Object);
+            string filePath = "filename";
 
             //Setup behavior of FileService mock
-            mockFileService.Setup(f => f.Save("filename", It.IsAny<League>()));
+            mockFileService.Setup(f => f.Save(filePath, It.IsAny<League>()));
 
             //Act
             var result = app.SendCommand("save filename");
 
             //Assert
-            Assert.AreEqual("Saved filename", result);            
+            Assert.AreEqual("Saved filename", result);  
+
+            //Verify that the save method is called with the correct parms
+            mockFileService.Verify(f => f.Save(filePath, It.IsAny<League>()));          
         }
 
         [TestMethod]
-        public void LoadSavedGameShouldReturnConfirmation()
+        public void LoadSavedGameShouldReturnConfirmationAndLoadGame()
         {
             //Arrange
             Mock<IFileService> mockFileService = new Mock<IFileService>();
@@ -104,6 +114,9 @@ namespace TableTennisTable_Tests
 
             //Assert
             Assert.AreEqual("Loaded filename", result);
+
+            //Verify that the game is loaded
+            mockFileService.Verify(f => f.Load("filename"));
         }
     }
 }
