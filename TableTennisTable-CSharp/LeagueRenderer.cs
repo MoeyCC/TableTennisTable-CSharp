@@ -23,6 +23,8 @@ namespace TableTennisTable_CSharp
                 return "No players yet";
             }
 
+            //return string.Join(",", rows.Select(row => string.Join(",", row.GetPlayers())));
+
             var renderedRows = rows.Select((row, index) => RenderRow(row, index, rows.Count));
             return string.Join("\r\n", renderedRows);
         }
