@@ -15,12 +15,7 @@ namespace TableTennisTable_Tests
             var app = CreateApp();
 
             Assert.AreEqual("No players yet", app.SendCommand("print"));
-        }
-
-        private App CreateApp()
-        {
-            return new App(new League(), new LeagueRenderer(), new FileService());
-        }
+        }        
 
         [TestMethod]
         public void AddPlayer_Should_AddPlayerToLeague()
@@ -59,8 +54,6 @@ namespace TableTennisTable_Tests
             var result = game.SendCommand("print");
 
             //Assert
-            //var susanRowIndex = league.GetRows().FindIndex(row => row.GetPlayers().Contains("Susan"));
-            //var bobRowIndex = league.GetRows().FindIndex(row => row.GetPlayers().Contains("Bob"));
             Assert.AreEqual(expected, result);
         }
 
@@ -158,30 +151,28 @@ namespace TableTennisTable_Tests
           ------------------- ------------------- -------------------";
 
             // Act
-            //var result = game.SendCommand("print");
             string resultFile = File.ReadAllText("League.txt");
 
             // Assert
             Assert.AreEqual(expected, game.SendCommand("print"));
             Assert.AreEqual("Alice\r\nSusan,Harry\r\nBob,Ben,Donald\r\n", resultFile); 
-            /* 
-            Assert.AreEqual("Alice,Bob,Charlie", app.SendCommand("print"));
-            Assert.AreEqual("Saved League.txt", app.SendCommand("save League.txt"));
-
-            string resultFile = File.ReadAllText("League.txt");
-            Assert.AreEqual("Alice\r\nBob,Charlie\r\n", resultFile); 
-            */
-        }
+        } 
 
         [TestMethod]
         public void Load_Should_LoadSavedLeague()
         {
-            //Arrange                        
+            //Arrange     
+            var game = CreateApp();                   
             
             //Act
             
             //Assert
             
+        }
+
+        private App CreateApp()
+        {
+            return new App(new League(), new LeagueRenderer(), new FileService());
         }
     }
 }
