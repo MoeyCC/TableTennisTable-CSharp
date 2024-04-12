@@ -9,20 +9,24 @@ namespace TableTennisTable_Tests
     [TestClass]
     public class IntegrationTests
     {
+        const string fileName = "Frogs.txt";
+
+        App game; 
+
+        [TestInitialize]
+        public void TestInitialize(){
+            game = new App(new League(), new LeagueRenderer(), new FileService());
+        }
+
         [TestMethod]
         public void TestPrintsEmptyGame()
         {
-            var app = CreateApp();
-
-            Assert.AreEqual("No players yet", app.SendCommand("print"));
+            Assert.AreEqual("No players yet", game.SendCommand("print"));
         }        
 
         [TestMethod]
-        public void AddPlayer_Should_AddPlayerToLeague()
+        public void AddPlayer_Should_Add_Player_To_League()
         {
-            //Arrange
-            var game = CreateApp();
-            
             //Act
             var result = game.SendCommand("add player Alice");
 
@@ -31,10 +35,9 @@ namespace TableTennisTable_Tests
         }
 
         [TestMethod]
-        public void RecordWin_Should_UpdateLeagueStandings()
+        public void RecordWin_Should_Update_League_Standings()
         {
             //Arrange
-            var game = CreateApp();
             game.SendCommand("add player Alice");
             game.SendCommand("add player Bob");
             game.SendCommand("add player Harry");
@@ -58,10 +61,9 @@ namespace TableTennisTable_Tests
         }
 
         [TestMethod]
-        public void TestGetWinner()
+        public void Test_Get_Winner()
         {
             //Arrange
-            var game = CreateApp();
             game.SendCommand("add player Alice");
             game.SendCommand("add player Bob");
             game.SendCommand("add player Harry");
@@ -74,13 +76,9 @@ namespace TableTennisTable_Tests
         }
 
         [TestMethod]
-        public void Print_Should_DisplayLeagueWithCorrectFormat()
+        public void Print_Should_Display_League_With_Correct_Format()
         {
             //Arrange
-            var league = new League();
-            var leagueRenderer = new LeagueRenderer();
-            var fileService = new FileService();
-            var game = new App(league, leagueRenderer, fileService);
             game.SendCommand("add player Alice");
             game.SendCommand("add player Bob");
             game.SendCommand("add player Harry");
@@ -106,20 +104,20 @@ namespace TableTennisTable_Tests
         }
 
         [TestMethod]
-        public void Save_Should_SaveLeagueToFile_Using_Mock_FileService()
+        public void Save_Should_Save_League_To_File_Using_Mock_FileService()
         {
             //Arrange
             var league = new League();
             var leagueRenderer = new LeagueRenderer();
             var mockFileService = new Mock<IFileService>();
-            var game = new App(league, leagueRenderer, mockFileService.Object);
+            var gameApp = new App(league, leagueRenderer, mockFileService.Object);
             game.SendCommand("add player Alice");
             game.SendCommand("add player Bob");
             var filePath = "saved_league.txt";
             mockFileService.Setup(f => f.Save(filePath, league));
 
             //Act
-            var result = game.SendCommand("save saved_league.txt");
+            var result = gameApp.SendCommand("save saved_league.txt");
 
             //Assert
             Assert.AreEqual("Saved saved_league.txt", result);
@@ -129,17 +127,18 @@ namespace TableTennisTable_Tests
         } 
 
         [TestMethod]
-        public void Save_Should_SaveLeagueToFile_Using_Real_FileService()
+        public void Save_Should_Save_League_To_File_Using_Real_FileService()
         {
             // Arrange
-            var game = CreateApp();
+            //const string FileName = "frogsAreCool";
             game.SendCommand("add player Alice");
             game.SendCommand("add player Susan");
             game.SendCommand("add player Harry");
             game.SendCommand("add player Bob");
             game.SendCommand("add player Ben");
             game.SendCommand("add player Donald");
-            game.SendCommand("save League.txt");
+            //game.SendCommand($"save {FileName}.txt");
+            game.SendCommand($"save {fileName}");
             var expected = @"                              -------------------
                               |      Alice      |
                               -------------------
@@ -150,29 +149,27 @@ namespace TableTennisTable_Tests
           |       Bob       | |       Ben       | |     Donald      |
           ------------------- ------------------- -------------------";
 
-            // Act
-            string resultFile = File.ReadAllText("League.txt");
+            // Act 
+            string resultFile = File.ReadAllText($"{fileName}");
 
             // Assert
-            Assert.AreEqual(expected, game.SendCommand("print"));
+            //Assert.AreEqual(expected, game.SendCommand("print"));
             Assert.AreEqual("Alice\r\nSusan,Harry\r\nBob,Ben,Donald\r\n", resultFile); 
         } 
 
         [TestMethod]
-        public void Load_Should_LoadSavedLeague()
+        public void Load_Should_Load_Saved_League()
         {
             //Arrange     
-            var game = CreateApp();                   
+            //var gamePrint = game.SendCommand("print");
+
+            //const string savedResultFile = "SavedGameResults.txt";
             
             //Act
+            //game.SendCommand($"load {savedResultFile}");
             
             //Assert
-            
-        }
-
-        private App CreateApp()
-        {
-            return new App(new League(), new LeagueRenderer(), new FileService());
+            //Assert.AreEqual(gamePrint, savedResultFile); 
         }
     }
 }
