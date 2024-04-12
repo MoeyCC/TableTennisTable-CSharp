@@ -9,13 +9,24 @@ namespace TableTennisTable_Tests
     [TestClass]
     public class IntegrationTests
     {
-        const string fileName = "Frogs.txt";
-
+        const string fileName = "SavedLeague.txt";
+        const string filePath = "C:\\Users\\Default.DESKTOP-4G06BME\\OneDrive\\Desktop\\Corndel\\TestsPart1\\TableTennisTable-CSharp\\TableTennisTable-Tests\\bin\\Debug\\net6.0\\";
+        
         App game; 
 
         [TestInitialize]
         public void TestInitialize(){
             game = new App(new League(), new LeagueRenderer(), new FileService());
+        }
+
+        private void SetUpPlayers(App game)
+        {
+            game.SendCommand("add player Alice");
+            game.SendCommand("add player Bob");
+            game.SendCommand("add player Harry");
+            game.SendCommand("add player Susan");
+            game.SendCommand("add player Ben");
+            game.SendCommand("add player Donald");
         }
 
         [TestMethod]
@@ -79,14 +90,9 @@ namespace TableTennisTable_Tests
         public void Print_Should_Display_League_With_Correct_Format()
         {
             //Arrange
-            game.SendCommand("add player Alice");
-            game.SendCommand("add player Bob");
-            game.SendCommand("add player Harry");
-            game.SendCommand("add player Susan");
-            game.SendCommand("add player Ben");
-            game.SendCommand("add player Donald");
+            SetUpPlayers(game);
             game.SendCommand("record win Susan Bob");
-
+ 
             //Act
             var actual = game.SendCommand("print");
             var expected = @"                              -------------------
@@ -97,7 +103,7 @@ namespace TableTennisTable_Tests
                     ------------------- -------------------
           ------------------- ------------------- -------------------
           |       Bob       | |       Ben       | |     Donald      |
-          ------------------- ------------------- -------------------";
+          ------------------- ------------------- -------------------"; 
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -130,46 +136,43 @@ namespace TableTennisTable_Tests
         public void Save_Should_Save_League_To_File_Using_Real_FileService()
         {
             // Arrange
-            //const string FileName = "frogsAreCool";
-            game.SendCommand("add player Alice");
-            game.SendCommand("add player Susan");
-            game.SendCommand("add player Harry");
-            game.SendCommand("add player Bob");
-            game.SendCommand("add player Ben");
-            game.SendCommand("add player Donald");
-            //game.SendCommand($"save {FileName}.txt");
+            SetUpPlayers(game);
             game.SendCommand($"save {fileName}");
-            var expected = @"                              -------------------
-                              |      Alice      |
-                              -------------------
-                    ------------------- -------------------
-                    |      Susan      | |      Harry      |
-                    ------------------- -------------------
-          ------------------- ------------------- -------------------
-          |       Bob       | |       Ben       | |     Donald      |
-          ------------------- ------------------- -------------------";
-
+            
             // Act 
             string resultFile = File.ReadAllText($"{fileName}");
 
             // Assert
-            //Assert.AreEqual(expected, game.SendCommand("print"));
-            Assert.AreEqual("Alice\r\nSusan,Harry\r\nBob,Ben,Donald\r\n", resultFile); 
+            Assert.AreEqual("Alice\r\nBob,Harry\r\nSusan,Ben,Donald\r\n", resultFile); 
+
+            // Cleanup - delete the saved league file 
+            File.Delete($"{filePath}{fileName}");
         } 
 
         [TestMethod]
         public void Load_Should_Load_Saved_League()
         {
-            //Arrange     
-            //var gamePrint = game.SendCommand("print");
-
-            //const string savedResultFile = "SavedGameResults.txt";
-            
+            //Arrange   
+            SetUpPlayers(game); 
+            game.SendCommand($"save {fileName}"); 
+                        
             //Act
-            //game.SendCommand($"load {savedResultFile}");
-            
+            var actual = game.SendCommand("print");
+            var expected = @"                              -------------------
+                              |      Alice      |
+                              -------------------
+                    ------------------- -------------------
+                    |       Bob       | |      Harry      |
+                    ------------------- -------------------
+          ------------------- ------------------- -------------------
+          |      Susan      | |       Ben       | |     Donald      |
+          ------------------- ------------------- -------------------"; 
+                                    
             //Assert
-            //Assert.AreEqual(gamePrint, savedResultFile); 
-        }
+            Assert.AreEqual(expected, actual); 
+
+            // Cleanup - delete the saved league file 
+            File.Delete($"{filePath}{fileName}");
+        } 
     }
 }
